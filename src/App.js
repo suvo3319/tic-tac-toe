@@ -1,10 +1,10 @@
 import { useState } from "react";
-import "./App.css";
 import GameBoard from "./components/GameBoard";
 import Player from "./components/Player";
 import Log from "./components/Log";
 import Data from "./Data";
 import GameOver from "./components/GameOver";
+import Header from "./components/Header";
 
 const initialBoard = [
   [null, null, null],
@@ -36,7 +36,6 @@ const deriveWinner = (gameBoard, players) => {
   let winner;
 
   for (const combination of Data) {
-    console.log(combination[0])
     const firstSquareSymbol = gameBoard[combination[0].row][combination[0].column];
     const secondSquareSymbol = gameBoard[combination[1].row][combination[1].column];
     const thirdSquareSymbol = gameBoard[combination[2].row][combination[2].column];
@@ -85,23 +84,22 @@ function App() {
     setPlayers((prevPlayers) => {
       return {
         ...prevPlayers,
-
         [symbol]: newName,
       };
     });
   }
 
   return (
-    <main>
-      <div id="game-container">
-        <ol id="players" className="highlight-player">
+    <main className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(241,210,70,0.98),rgba(250,176,103,0.87))] bg-repeat bg-cover flex flex-col items-center justify-center">
+      <Header />
+      <div id="game-container" className="max-w-2xl w-full p-6 bg-[#383624] rounded-lg shadow-lg">
+        <ol id="players" className="flex justify-between mb-4">
           <Player
             initialName="Player 1"
             symbol="X"
             isActive={activePlayer === "X"}
             onChangeName={handlePlayerNameChange}
           />
-
           <Player
             initialName="Player 2"
             symbol="O"
@@ -112,10 +110,8 @@ function App() {
         {(winner || hasDraw) && (
           <GameOver winner={winner} onRestart={handleRestart} />
         )}
-
         <GameBoard onSelectSquare={handleSelectSquare} board={gameBoard} />
       </div>
-
       <Log turns={gameTurns} />
     </main>
   );
